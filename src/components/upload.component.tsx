@@ -31,7 +31,7 @@ export const Upload = () => {
 
     const uppy = useUppy(() => {
         return new Uppy({
-            debug: true,
+            debug: process.env.NODE_ENV === 'development',
             autoProceed: true,
             allowMultipleUploadBatches: true,
             restrictions: {
