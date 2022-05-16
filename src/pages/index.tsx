@@ -8,7 +8,7 @@ const Home: NextPage = () => {
       <Page.Header center mt={5} style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
         <Text h1 font={'4rem'} margin={0}>SVG Optimize</Text>
         <Text p font={'1rem'} style={{ color: '#696969' }}>
-          optimize | rename | resize your svg files
+          optimize one or multiple svg files with <Link href="https://github.com/svg/svgo" icon color target={'_blank'}>svgo</Link>
         </Text>
       </Page.Header >
       <Page.Content style={{ display: 'flex', placeContent: 'center' }}>
