@@ -10,7 +10,7 @@
     core-js-pure "^3.20.2"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7":
   version "7.17.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.9.tgz#d19fbf802d01a8cb6cf053a64e472d42c434ba72"
   integrity sha512-lSiBBvodq29uShpWGNbgFdKYNiFDo5/HIYsaCEY9ff4sb10x9jizo2+pRrSyF4jKZCXqgzuqBOQKbUm90gQwJg==
@@ -241,6 +241,14 @@
     "@typescript-eslint/types" "5.23.0"
     eslint-visitor-keys "^3.0.0"
 
+"@uppy/companion-client@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@uppy/companion-client/-/companion-client-2.1.0.tgz#6de2f3ba190b0e2a2afe0be020b191031ae8d299"
+  integrity sha512-1Zsag2z9kygXuVbUxqHhkTJUmEHwbejjyf7vmm+P/AiVgK3O37JINYBGOpdTJNgbC9UydLBjleXo8peDVgpg8Q==
+  dependencies:
+    "@uppy/utils" "^4.0.7"
+    namespace-emitter "^2.0.1"
+
 "@uppy/core@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@uppy/core/-/core-2.2.0.tgz#670697d50d3076d90a3ca0ac85c75f6699b60156"
@@ -364,6 +372,15 @@
   integrity sha512-nKViMT8XchKy+NWpb3DtVKuzZBmW7au26LrMq89EsvTwIOT6UR9+7bmz/+zr3+lc7UC7vMgNChIC6G+/Ya9wWQ==
   dependencies:
     lodash.throttle "^4.1.1"
+
+"@uppy/xhr-upload@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@uppy/xhr-upload/-/xhr-upload-2.1.0.tgz#9c52154df30e6e275028d3cb66be844a150de626"
+  integrity sha512-io1uNu7lGkhIkMnt13bu3FYSAdRbBRWl8n/6njYi+727Jyr0XhKfmBYV9OiruFSxLz5Bfxkw2gTs6e0qUb63nA==
+  dependencies:
+    "@uppy/companion-client" "^2.1.0"
+    "@uppy/utils" "^4.0.7"
+    nanoid "^3.1.25"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -1596,13 +1613,6 @@ react-dom@18.1.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.22.0"
-
-react-dropzone-uploader@^2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/react-dropzone-uploader/-/react-dropzone-uploader-2.11.0.tgz#6579e83f4f98c8248a3f3b5825c436ca3d6441cf"
-  integrity sha512-1DpdPMGKP7vYL5SeCh13HCl+Xrz0F6jGrDPU5Tj2ojEIXGMCtfflrZhyXdr7u40IkQ+hYjAUEEtJW24SiY8WRA==
-  dependencies:
-    "@babel/runtime" "^7.1.2"
 
 react-is@^16.13.1:
   version "16.13.1"

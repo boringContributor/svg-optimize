@@ -3,16 +3,17 @@ import Uppy, { UppyFile } from '@uppy/core'
 import DropTarget from '@uppy/drop-target'
 import { FileInput, DragDrop, useUppy } from '@uppy/react'
 import { X, Download } from '@geist-ui/icons'
-import { Button, Card, Display, Spacer, Table, Tag, Text, Tooltip, useTheme } from '@geist-ui/core'
+import { Button, Card, Display, Spacer, Table, Tag, Text, Tooltip } from '@geist-ui/core'
 import { Lock } from '@geist-ui/icons'
 import { useFileStore } from '../store/file.store';
+import XHRUpload from '@uppy/xhr-upload'
 
 import '@uppy/core/dist/style.css'
 import '@uppy/drop-target/dist/style.css'
 import '@uppy/drag-drop/dist/style.css'
 import '@uppy/file-input/dist/style.css'
 
-const lockDisclaimer = "All the data processing is done on the client side. We do not send any of your data to a backend."
+const lockDisclaimer = "No data is stored on a server."
 
 enum Status {
     READY = 'READY'
@@ -44,8 +45,15 @@ export const Upload = () => {
                 addFile(currentFile);
                 return currentFile
             },
+        }).use(XHRUpload, {
+            endpoint: '/api/hello',
+            method: 'POST'
         })
     });
+
+    useEffect(() => {
+        return () => uppy.close();
+    }, [])
 
     useEffect(() => {
         uppy.use(DropTarget, {
@@ -57,6 +65,9 @@ export const Upload = () => {
         return files.map(file => ({ name: file.name, status: Status.READY, size: `${String(file.size)}` }))
     }, [files])
 
+    const downloadFiles = async () => {
+        // console.log(await uppy.upload())
+    }
     const renderAction = (_: any, rowData: TableProps) => {
         const removeHandler = () => {
             const fileName = rowData.name;
@@ -112,7 +123,7 @@ export const Upload = () => {
                                 chooseFiles: "Add more files"
                             }
                         }} />
-                        <Button type="success" icon={<Download />} auto>Download</Button>
+                        <Button type="success" icon={<Download />} auto onClick={downloadFiles}>Download</Button>
                     </Card.Footer>
                 </ Card>
             )
