@@ -26,7 +26,6 @@ type TableProps = {
 }
 
 export const Upload = () => {
-    const theme = useTheme();
     const { files, addFile, removeFile } = useFileStore();
 
     const uppy = useUppy(() => {
@@ -67,7 +66,7 @@ export const Upload = () => {
             removeFile(fileName)
         }
         return (
-            <Button type="error" iconRight={<X />} auto scale={2 / 3} px={0.6} onClick={removeHandler} />
+            <Button style={{ textAlign: 'center' }} type="error" iconRight={<X />} auto scale={2 / 3} px={0.6} onClick={removeHandler} />
         )
     }
 
@@ -105,7 +104,7 @@ export const Upload = () => {
                         <Table.Column prop="name" />
                         <Table.Column prop="status" render={renderStatus} />
                         <Table.Column prop="size" render={renderBadge} />
-                        <Table.Column prop="method" width={150} render={renderAction} />
+                        <Table.Column prop="method" render={renderAction} />
                     </Table>
                     <Card.Footer style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <FileInput uppy={uppy} pretty inputName="files[]" locale={{
