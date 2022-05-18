@@ -1,15 +1,24 @@
-import { UppyFile } from '@uppy/core'
 import create from 'zustand'
+import { Data } from '../shared/types'
 
 interface FileState {
-    files: UppyFile[]
-    addFile: (newFile: UppyFile) => void
-    removeFile: (fileName: string) => void
+    files: Data[]
+    addFile: (newFile: Data) => void
+    addFiles: (newFile: Data[]) => void
+    removeFile: (name: string) => void
 
 }
 
 export const useFileStore = create<FileState>(set => ({
     files: [],
-    addFile: (newFile: UppyFile) => set(state => ({ files: [...state.files, newFile] })),
-    removeFile: (fileName: string) => set(state => ({ files: state.files.filter(file => file.name !== fileName) }))
+    addFile: (newFile: Data) => set(state => ({ files: [...state.files, newFile] })),
+    addFiles: (newFiles: Data[]) => set(state => {
+        const result = { files: [...state.files] }
+        for (const file of newFiles) {
+            if (state.files.find(c => c.id === file.id)) break;
+            result.files.push(file)
+        }
+        return result;
+    }),
+    removeFile: (name: string) => set(state => ({ files: state.files.filter(file => file.name !== name) }))
 }))

@@ -1,47 +1,53 @@
 import { Button, Table, Tag, Text } from "@geist-ui/core";
 import { X } from "@geist-ui/icons";
 import Uppy from "@uppy/core";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useState } from "react";
 import { useFileStore } from "../store/file.store";
 
 enum Status {
-    READY = 'READY'
+    READY = 'READY',
+    FINISHED = 'FINISHED'
 }
 type TableProps = {
     name: string;
     status: Status;
-    size: string;
+    size: number;
 
     method?: any;
 }
 
 const renderStatus = (_: any, rowData: TableProps) => {
+    const { files } = useFileStore();
+    const file = files.find(file => file.name === rowData.name);
     return (
-        <Tag type="success">{rowData.status}</Tag>
+        <Tag type={file?.id ? 'success' : 'secondary'}>{file?.id ? Status.FINISHED : Status.READY}</Tag>
     )
 }
 
 const renderBadge = (_: any, rowData: TableProps) => {
+    const { files } = useFileStore();
+    const oldSize = rowData.size
+    const newSize = files.find(file => file.name === rowData.name)?.size;
     return (
-        <Text>{rowData.size} bytes ➞ {~~(+rowData.size * 0.3)} bytes</Text>
+        <Text>{oldSize} bytes {newSize ? `➞ ${~~newSize} bytes` : undefined}</Text>
     )
 }
 
-
-
 export const SvgList: FC<{ uppy: Uppy }> = ({ uppy }) => {
-    const { files, removeFile } = useFileStore();
+    const { removeFile } = useFileStore()
+    const [files, setFiles] = useState<TableProps[]>(uppy.getFiles().map(file => ({ name: file.name, status: Status.READY, size: file.size })))
 
-    const data = useMemo<TableProps[]>(() => {
-        return files.map(file => ({ name: file.name, status: Status.READY, size: `${String(file.size)}` }))
-    }, [files])
+
+    useEffect(() => {
+        uppy.on('file-removed', removedFile => {
+            setFiles(files.filter(file => file.name !== removedFile.name))
+        });
+    }, [uppy])
 
     const renderAction = (_: any, rowData: TableProps) => {
-
         const removeHandler = () => {
             const fileName = rowData.name;
-            const fileID = files.find(file => file.name === fileName)?.id as string;
-
+            const fileID = uppy.getFiles().find(file => file.name === fileName)?.id as string;
             uppy.removeFile(fileID)
             removeFile(fileName)
         }
@@ -51,7 +57,7 @@ export const SvgList: FC<{ uppy: Uppy }> = ({ uppy }) => {
     }
 
     return (
-        <Table<TableProps> data={data}>
+        <Table<TableProps> data={files}>
             <Table.Column prop="name" />
             <Table.Column prop="status" render={renderStatus} />
             <Table.Column prop="size" render={renderBadge} />

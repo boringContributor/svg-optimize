@@ -7,21 +7,22 @@ import '@uppy/drag-drop/dist/style.css'
 import DropTarget from '@uppy/drop-target'
 import '@uppy/drop-target/dist/style.css'
 import '@uppy/file-input/dist/style.css'
-import { DragDrop, FileInput, useUppy } from '@uppy/react'
+import { DragDrop, useUppy } from '@uppy/react'
 import { useOptimize } from '../hooks/use-optimize'
 import { useFileStore } from '../store/file.store'
 import { SvgList } from './svg-list.component'
 
-const lockDisclaimer = "No data is stored on a server."
+const lockDisclaimer = 'No data is stored on a server.'
+const fileDisclaimer = 'Maximum 50 Files with 3 MB each allowed'
 
 export const Upload: FC = () => {
-    const { files, addFile } = useFileStore();
-    const { optimizeFiles } = useOptimize();
+    const { files, addFiles } = useFileStore();
+    const { optimizeFiles, downloadFilesAsZip } = useOptimize();
 
     const uppy = useUppy(() => {
         return new Uppy({
             debug: process.env.NODE_ENV === 'development',
-            autoProceed: false,
+            autoProceed: true,
             allowMultipleUploadBatches: true,
             restrictions: {
                 maxFileSize: 3000000,
@@ -31,13 +32,15 @@ export const Upload: FC = () => {
             },
             onBeforeFileAdded: (currentFile: UppyFile) => {
                 if (currentFile.extension !== 'svg') return;
-                addFile(currentFile);
                 return currentFile
             },
         })
     });
-
     useEffect(() => {
+        uppy.on('file-added', async file => {
+            const result = await optimizeFiles([file]);
+            addFiles(result);
+        })
         return () => uppy.close();
     }, [])
 
@@ -47,23 +50,18 @@ export const Upload: FC = () => {
         });
     }, [uppy]);
 
-
-    const downloadFiles = async () => {
-        console.log(await optimizeFiles(files))
-    }
-
     return <>
         {
             files.length === 0 ? (
                 <Display shadow width="500px" height="500px" caption={<><Tooltip text={lockDisclaimer}><Lock size={16} /></Tooltip>
-                    <Spacer inline w={.35} />Maximum 50 Files with 3 MB each allowed</>}>
+                    <Spacer inline w={.35} />{fileDisclaimer}</>}>
                     <DragDrop
                         width="100%"
                         height="100%"
                         uppy={uppy}
                         locale={{
                             strings: {
-                                dropHereOr: 'Drop here or %{browse}',
+                                dropHereOr: 'Drop anywhere or %{browse}',
                                 browse: 'browse',
                             },
                         }}
@@ -72,13 +70,13 @@ export const Upload: FC = () => {
             ) : (
                 <Card style={{ width: 1000 }}>
                     <SvgList uppy={uppy} />
-                    <Card.Footer style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <FileInput uppy={uppy} pretty inputName="files[]" locale={{
+                    <Card.Footer style={{ display: 'flex', justifyContent: 'end' }}>
+                        {/* <FileInput uppy={uppy} pretty inputName="files[]" locale={{
                             strings: {
                                 chooseFiles: "Add more files"
                             }
-                        }} />
-                        <Button type="success" icon={<Download />} auto onClick={downloadFiles}>Download</Button>
+                        }} /> */}
+                        <Button type="success" icon={<Download />} auto onClick={downloadFilesAsZip}>Download</Button>
                     </Card.Footer>
                 </ Card>
             )
