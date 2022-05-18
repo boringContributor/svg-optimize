@@ -42,7 +42,7 @@ export const Upload: FC = () => {
             addFiles(result);
         })
         return () => uppy.close();
-    }, [])
+    }, [addFiles, optimizeFiles, uppy])
 
     useEffect(() => {
         uppy.use(DropTarget, {

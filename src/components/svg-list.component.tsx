@@ -16,33 +16,18 @@ type TableProps = {
     method?: any;
 }
 
-const renderStatus = (_: any, rowData: TableProps) => {
-    const { files } = useFileStore();
-    const file = files.find(file => file.name === rowData.name);
-    return (
-        <Tag type={file?.id ? 'success' : 'secondary'}>{file?.id ? Status.FINISHED : Status.READY}</Tag>
-    )
-}
 
-const renderBadge = (_: any, rowData: TableProps) => {
-    const { files } = useFileStore();
-    const oldSize = rowData.size
-    const newSize = files.find(file => file.name === rowData.name)?.size;
-    return (
-        <Text>{oldSize} bytes {newSize ? `➞ ${~~newSize} bytes` : undefined}</Text>
-    )
-}
 
 export const SvgList: FC<{ uppy: Uppy }> = ({ uppy }) => {
-    const { removeFile } = useFileStore()
-    const [files, setFiles] = useState<TableProps[]>(uppy.getFiles().map(file => ({ name: file.name, status: Status.READY, size: file.size })))
+    const { files, removeFile } = useFileStore()
+    const [data, setData] = useState<TableProps[]>(uppy.getFiles().map(file => ({ name: file.name, status: Status.READY, size: file.size })))
 
 
     useEffect(() => {
         uppy.on('file-removed', removedFile => {
-            setFiles(files.filter(file => file.name !== removedFile.name))
+            setData(data.filter(file => file.name !== removedFile.name))
         });
-    }, [uppy])
+    }, [uppy, data])
 
     const renderAction = (_: any, rowData: TableProps) => {
         const removeHandler = () => {
@@ -56,8 +41,23 @@ export const SvgList: FC<{ uppy: Uppy }> = ({ uppy }) => {
         )
     }
 
+    const renderStatus = (_: any, rowData: TableProps) => {
+        const file = files.find(file => file.name === rowData.name);
+        return (
+            <Tag type={file?.id ? 'success' : 'secondary'}>{file?.id ? Status.FINISHED : Status.READY}</Tag>
+        )
+    }
+
+    const renderBadge = (_: any, rowData: TableProps) => {
+        const oldSize = rowData.size
+        const newSize = files.find(file => file.name === rowData.name)?.size;
+        return (
+            <Text>{oldSize} bytes {newSize ? `➞ ${~~newSize} bytes` : undefined}</Text>
+        )
+    }
+
     return (
-        <Table<TableProps> data={files}>
+        <Table<TableProps> data={data}>
             <Table.Column prop="name" />
             <Table.Column prop="status" render={renderStatus} />
             <Table.Column prop="size" render={renderBadge} />
