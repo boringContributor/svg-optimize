@@ -53,7 +53,7 @@ export const Upload: FC = () => {
     return <>
         {
             files.length === 0 ? (
-                <Display shadow width="500px" height="500px" caption={<><Tooltip text={lockDisclaimer}><Lock size={16} /></Tooltip>
+                <Display shadow width="500px" marginBottom={3} caption={<><Tooltip text={lockDisclaimer}><Lock size={16} /></Tooltip>
                     <Spacer inline w={.35} />{fileDisclaimer}</>}>
                     <DragDrop
                         width="100%"
@@ -68,7 +68,7 @@ export const Upload: FC = () => {
                     />
                 </Display>
             ) : (
-                <Card style={{ width: 1000 }}>
+                <Card style={{ width: 900 }} marginBottom={3}>
                     <SvgList uppy={uppy} />
                     <Card.Footer style={{ display: 'flex', justifyContent: 'end' }}>
                         {/* <FileInput uppy={uppy} pretty inputName="files[]" locale={{
