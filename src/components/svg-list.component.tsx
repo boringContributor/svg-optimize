@@ -1,7 +1,7 @@
 import { Button, Table, Tag, Text } from "@geist-ui/core";
 import { X } from "@geist-ui/icons";
 import Uppy from "@uppy/core";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useFileStore } from "../store/file.store";
 
 enum Status {
@@ -20,14 +20,6 @@ type TableProps = {
 
 export const SvgList: FC<{ uppy: Uppy }> = ({ uppy }) => {
     const { files, removeFile } = useFileStore()
-    const [data, setData] = useState<TableProps[]>(uppy.getFiles().map(file => ({ name: file.name, status: Status.READY, size: file.size })))
-
-
-    useEffect(() => {
-        uppy.on('file-removed', removedFile => {
-            setData(data.filter(file => file.name !== removedFile.name))
-        });
-    }, [uppy, data])
 
     const renderAction = (_: any, rowData: TableProps) => {
         const removeHandler = () => {
@@ -57,7 +49,7 @@ export const SvgList: FC<{ uppy: Uppy }> = ({ uppy }) => {
     }
 
     return (
-        <Table<TableProps> data={data}>
+        <Table<TableProps> data={files.map(file => ({ name: file.name, size: file.size, status: Status.READY }))}>
             <Table.Column prop="name" />
             <Table.Column prop="status" render={renderStatus} />
             <Table.Column prop="size" render={renderBadge} />
