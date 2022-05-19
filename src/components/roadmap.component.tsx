@@ -3,7 +3,7 @@ import { FC } from "react"
 
 export const Roadmap: FC = () => {
     return (
-        <Card>
+        <Card marginBottom={4}>
             <Text h4 my={0}>Roadmap</Text>
             <Card.Body>
                 <Checkbox.Group value={['optimize']}>

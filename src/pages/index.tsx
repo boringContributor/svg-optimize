@@ -18,7 +18,7 @@ const Home: NextPage = () => {
           <Grid xs={24} sm={24} justify='center'><Roadmap /></Grid>
         </Grid.Container>
       </Page.Content>
-      <Page.Footer style={{ display: 'flex', placeContent: 'center' }}>
+      <Page.Footer style={{ display: 'flex', placeContent: 'center', marginTop: 2 }}>
         <Text p>Built with ❤️ by <Link href="https://www.sause.dev/" icon color target={'_blank'}>Boring Contributor</Link></Text>
       </Page.Footer>
     </Page >
